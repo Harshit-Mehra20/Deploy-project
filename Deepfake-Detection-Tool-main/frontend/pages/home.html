@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deepfake Detection – Real or Fake?</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="tab-content" id="loginForm">
+      <h2>Welcome back</h2>
+      <p class="modal-sub">Sign in to access your detection history</p>
+      <input type="email" id="loginEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="loginPassword" placeholder="Password" class="modal-input">
+      <div class="remember-row">
+        <label><input type="checkbox"> Remember me</label>
+        <a href="#" onclick="showForgotPassword(); return false;">Forgot password?</a>
+      </div>
+      <button class="modal-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="tab-content hidden" id="signupForm">
+      <h2>Start free trial</h2>
+      <p class="modal-sub">7 days free — no credit card required</p>
+      <div class="trial-badge"><i class="fas fa-gift"></i> 7-Day Free Trial Included</div>
+      <input type="text" id="signupName" placeholder="Full name" class="modal-input">
+      <input type="email" id="signupEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="signupPassword" placeholder="Create password" class="modal-input">
+      <p class="terms-note">After trial, ₹500/month. Cancel anytime.</p>
+      <button class="modal-btn" onclick="handleSignup()">Start Free Trial</button>
+    </div>
+
+    <!-- FORGOT PASSWORD — STEP 1: Enter Email -->
+    <div class="tab-content hidden" id="forgotForm">
+      <button class="back-btn" onclick="showLogin()"><i class="fas fa-arrow-left"></i> Back to Sign In</button>
+      <h2>Reset Password</h2>
+      <p class="modal-sub">Enter your email and we'll send a reset code</p>
+      <input type="email" id="forgotEmail" placeholder="Email address" class="modal-input">
+      <button class="modal-btn" onclick="handleForgotPassword()">
+        <i class="fas fa-paper-plane"></i> Send Reset Code
+      </button>
+    </div>
+
+    <!-- FORGOT PASSWORD — STEP 2: Enter Code -->
+    <div class="tab-content hidden" id="verifyForm">
+      <button class="back-btn" onclick="showForgotPassword()"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2>Enter Reset Code</h2>
+      <p class="modal-sub" id="verifySubtext">We sent a 6-digit code to your email</p>
+      <div class="code-inputs" id="codeInputs">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,0)">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,1)">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,2)">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,3)">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,4)">
+        <input type="text" maxlength="1" class="code-box" oninput="codeInput(this,5)">
+      </div>
+      <button class="modal-btn" onclick="handleVerifyCode()">Verify Code</button>
+      <p style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:0.75rem;">
+        Didn't receive it? <a href="#" onclick="handleForgotPassword(); return false;" style="color:var(--accent)">Resend code</a>
+      </p>
+    </div>
+
+    <!-- FORGOT PASSWORD — STEP 3: New Password -->
+    <div class="tab-content hidden" id="newPassForm">
+      <button class="back-btn" onclick="showVerify()"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2>New Password</h2>
+      <p class="modal-sub">Create a strong new password</p>
+      <div style="position:relative;">
+        <input type="password" id="newPass1" placeholder="New password" class="modal-input">
+        <i class="fas fa-eye toggle-pass" onclick="togglePassVis('newPass1',this)"></i>
+      </div>
+      <div style="position:relative;">
+        <input type="password" id="newPass2" placeholder="Confirm new password" class="modal-input">
+        <i class="fas fa-eye toggle-pass" onclick="togglePassVis('newPass2',this)"></i>
+      </div>
+      <div class="pass-strength" id="passStrength"></div>
+      <button class="modal-btn" onclick="handleSetNewPassword()">
+        <i class="fas fa-lock"></i> Update Password
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Trial Popup -->
+<div class="trial-popup" id="trialPopup">
+  <button class="popup-close" onclick="closeTrialPopup()"><i class="fas fa-times"></i></button>
+  <div class="popup-icon"><i class="fas fa-crown"></i></div>
+  <h3>Your Free Trial Has Ended</h3>
+  <p>You've used your 7-day free trial. Continue with full access for just ₹500/month.</p>
+  <div class="popup-features">
+    <div><i class="fas fa-check"></i> Unlimited detections</div>
+    <div><i class="fas fa-check"></i> Detailed forensic reports</div>
+    <div><i class="fas fa-check"></i> Video & audio analysis</div>
+    <div><i class="fas fa-check"></i> Priority processing</div>
+  </div>
+  <button class="popup-btn" onclick="startPayment()">Upgrade – ₹500/month</button>
+  <p class="popup-small">Cancel anytime. No hidden fees.</p>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-card" style="max-width:480px;">
+    <button class="modal-close" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
+
+    <!-- Plan selection -->
+    <div id="planSelect">
+      <h2 style="margin-bottom:0.25rem;">Choose Your Plan</h2>
+      <p class="modal-sub">Unlock full access to DeepDetect</p>
+
+      <div class="plan-cards">
+        <div class="plan-card active" id="plan-monthly" onclick="selectPlan('monthly')">
+          <div class="plan-check" id="check-monthly"><i class="fas fa-check-circle"></i></div>
+          <div class="plan-name">Monthly</div>
+          <div class="plan-price">₹500<span>/month</span></div>
+          <div class="plan-desc">Billed every month. Cancel anytime.</div>
+        </div>
+        <div class="plan-card" id="plan-yearly" onclick="selectPlan('yearly')">
+          <div class="plan-check hidden" id="check-yearly"><i class="fas fa-check-circle"></i></div>
+          <div class="plan-badge-save">Save 33%</div>
+          <div class="plan-name">Yearly</div>
+          <div class="plan-price" style="font-size:1.6rem; line-height:1.2;">₹4,000<span style="font-size:0.75em">/year</span></div>
+          <div class="plan-desc">₹333/month. Best value.</div>
+        </div>
+      </div>
+
+      <div class="payment-features">
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Unlimited image </div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Downloadable forensic PDF reports</div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Priority AI processing</div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> API access for developers</div>
+      </div>
+
+      <div class="payment-methods">
+        <span>Accepted:</span>
+        <img src="https://img.icons8.com/color/32/visa.png" alt="Visa" title="Visa">
+        <img src="https://img.icons8.com/color/32/mastercard.png" alt="Mastercard" title="Mastercard">
+        <img src="https://img.icons8.com/color/32/bhim-upi.png" alt="UPI" title="UPI">
+        <span style="font-size:12px;background:var(--bg3);padding:3px 8px;border-radius:6px;color:var(--text-secondary)">NetBanking</span>
+        <span style="font-size:12px;background:var(--bg3);padding:3px 8px;border-radius:6px;color:var(--text-secondary)">Wallets</span>
+      </div>
+
+      <button class="modal-btn" id="payNowBtn" onclick="initiateRazorpay()">
+        <i class="fas fa-lock"></i> Pay Securely with Razorpay
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:8px;">
+        🔒 256-bit SSL encryption · Powered by Razorpay
+      </p>
+    </div>
+
+    <!-- Payment success screen -->
+    <div id="paymentSuccess" class="hidden" style="text-align:center;padding:1rem 0;">
+      <div style="font-size:4rem;margin-bottom:1rem;">🎉</div>
+      <h2 style="color:var(--success);margin-bottom:0.5rem;">Payment Successful!</h2>
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Your account has been upgraded to Pro. Enjoy unlimited access!</p>
+      <div style="background:var(--bg3);border-radius:12px;padding:1rem;margin-bottom:1.5rem;text-align:left;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-secondary)">Plan</span><span id="successPlan" style="font-weight:600">Pro Monthly</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-secondary)">Amount</span><span id="successAmount" style="font-weight:600;color:var(--success)">₹500</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text-secondary)">Payment ID</span><span id="successPayId" style="font-size:11px;color:var(--text-muted)">-</span></div>
+      </div>
+      <button class="modal-btn" onclick="closePaymentModal();location.reload()">
+        <i class="fas fa-rocket"></i> Start Using Pro
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Header / Nav -->
+<header class="site-header">
+  <nav class="navbar">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <span class="logo-text">DeepDetect</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html" class="active">Home</a></li>
+      <li><a href="../index.html">Detector</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+        <i class="fas fa-sun" id="themeIcon"></i>
+      </button>
+      <button class="nav-btn outline" onclick="switchTab('login'); openModal()">Sign In</button>
+      <button class="nav-btn filled" onclick="switchTab('signup'); openModal()">Free Trial <span class="badge">7 Days</span></button>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-glow g1"></div>
+    <div class="hero-glow g2"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag"><span class="pulse-dot"></span>AI-Powered Forensic Analysis</div>
+    <h1 class="hero-title">Can You Trust<br><span class="gradient-text">What You See?</span></h1>
+    <p class="hero-desc">Upload any image. Our AI scans for GAN fingerprints, pixel anomalies, and metadata inconsistencies to reveal the truth in seconds.</p>
+    <div class="hero-cta">
+      <a href="../index.html" class="cta-primary"><i class="fas fa-crosshairs"></i> Analyze Now — It's Free</a>
+      <a href="research.html" class="cta-secondary"><i class="fas fa-file-alt"></i> Read Research Paper</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">98.7%</span><span class="stat-label">Accuracy</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-num">2.4s</span><span class="stat-label">Avg. Analysis</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="scan-card">
+      <div class="scan-header">
+        <span class="scan-dot red"></span><span class="scan-dot yellow"></span><span class="scan-dot green"></span>
+        <span class="scan-title">Live Analysis</span>
+      </div>
+      <div class="scan-face">
+        <div class="scan-img-wrap">
+          <img src="https://cdn.prod.website-files.com/63da3362f67ed649a19489ea/68954dd46dbed62c5d50b742_6577be9a884cd23b7c0673e4_shutterstock_2184456619_20_1_.webp" alt="Face analysis demo" class="scan-face-img">
+          <div class="scan-overlay">
+            <div class="scan-line"></div>
+            <div class="scan-box sb1"></div>
+            <div class="scan-box sb2"></div>
+            <div class="scan-box sb3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="scan-result">
+        <div class="result-row"><span>Authenticity</span><span class="result-val authentic">● AUTHENTIC</span></div>
+        <div class="result-row"><span>Confidence</span><span class="result-val">97.3%</span></div>
+        <div class="result-row"><span>GAN Trace</span><span class="result-val safe">None Detected</span></div>
+        <div class="scan-bar"><div class="scan-fill" style="width:97%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section how-it-works">
+  <div class="container">
+    <div class="section-label">HOW IT WORKS</div>
+    <h2 class="section-title">Three Steps to Truth</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="fas fa-upload"></i></div>
+        <h3>Upload Content</h3>
+        <p>Drag and drop any image, video, or audio file. Or paste a URL from anywhere on the web.</p>
+        <div class="step-formats">JPG · PNG · MP4 · MP3 · WAV</div>
+      </div>
+      <div class="step-connector"><i class="fas fa-arrow-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="fas fa-brain"></i></div>
+        <h3>AI Scans Signals</h3>
+        <p>Our engine runs GAN fingerprint detection, pixel pattern analysis, metadata forensics, and facial landmark checks simultaneously.</p>
+        <div class="step-formats">4 parallel checks</div>
+      </div>
+      <div class="step-connector"><i class="fas fa-arrow-right"></i></div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="fas fa-shield-check"></i></div>
+        <h3>Get Your Verdict</h3>
+        <p>Receive a detailed forensic report with a confidence score, anomaly map, and clear REAL / FAKE verdict.</p>
+        <div class="step-formats">Instant PDF report</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why It Matters -->
+<section class="section why-section">
+  <div class="container">
+    <div class="section-label">WHY IT MATTERS</div>
+    <h2 class="section-title">The Stakes Are Real</h2>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-icon warn"><i class="fas fa-newspaper"></i></div>
+        <h4>Combat Misinformation</h4>
+        <p>Fake images fuel propaganda and erode public trust. Our tool helps journalists, fact-checkers, and citizens verify before sharing.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon info"><i class="fas fa-user-shield"></i></div>
+        <h4>Protect Identity</h4>
+        <p>Deepfake scams cost millions annually. Detect fraudulent identity documents, impersonation attacks, and synthetic faces used in KYC fraud.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon success"><i class="fas fa-users"></i></div>
+        <h4>Safer Social Media</h4>
+        <p>Expose AI-generated profile pictures, bot accounts, and catfishing schemes before they cause harm.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon purple"><i class="fas fa-gavel"></i></div>
+        <h4>Legal Evidence</h4>
+        <p>Courts increasingly need verified media. Our forensic reports are formatted for legal documentation and expert testimony.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing / Trial CTA -->
+<section class="section pricing-section">
+  <div class="container">
+    <div class="pricing-card">
+      <div class="pricing-left">
+        <div class="trial-tag"><i class="fas fa-gift"></i> Limited Offer</div>
+        <h2>Start Your <span class="gradient-text">7-Day Free Trial</span></h2>
+        <p>Full access to all features. No credit card required during trial. After 7 days, continue for just ₹500/month.</p>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check-circle"></i> Unlimited image </li>
+          <li><i class="fas fa-check-circle"></i> Downloadable PDF forensic reports</li>
+          <li><i class="fas fa-check-circle"></i> API access for developers</li>
+          <li><i class="fas fa-check-circle"></i> Priority support</li>
+        </ul>
+        <button class="cta-primary" onclick="startPayment()">Claim Free Trial <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="pricing-right">
+        <div class="price-display">
+          <div class="price-free">DeepDetect</div>
+          <div class="price-period">for 7 days</div>
+          <div class="price-then">then ₹500/month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="section-label">TRUSTED BY</div>
+    <h2 class="section-title">What Users Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Caught a deepfake profile picture instantly. The confidence score and heatmap made it easy to explain to my team."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&q=80" alt="Arjun M.">
+          <div><strong>Arjun M.</strong><span>Cybersecurity Analyst, Bengaluru</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"As a journalist, verifying images is critical. This tool has become part of my daily workflow. Nothing else comes close."</p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1494790108755-2616b612b3fd?w=50&q=80" alt="Priya S.">
+          <div><strong>Priya S.</strong><span>Investigative Journalist, Delhi</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo-wrap">
+        <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+        <span class="logo-text">DeepDetect</span>
+      </div>
+      <p>AI-powered deepfake detection for a safer digital world.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Product</h5>
+        <a href="../index.html">Detector</a>
+        <a href="research.html">Research</a>
+        <a href="#">API Docs</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <a href="mailto:dikshaasnora42@gmail.com">dikshaasnora42@gmail.com</a>
+        <a href="tel:+7303613404">+91 730 360 3404</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Deepfake Detection Project. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="../assets/js/script.js"></script>
+<script>
+// ── PAYMENT / RAZORPAY ───────────────────────
+// REPLACE with your real Razorpay Key ID from razorpay.com/dashboard
+const RAZORPAY_KEY = 'YOUR_RAZORPAY_KEY_ID';
+
+let selectedPlan = 'monthly';
+const plans = {
+  monthly: { amount: 50000, label: 'Pro Monthly', display: '₹500' },  // amount in paise (₹500 = 50000)
+  yearly:  { amount: 400000, label: 'Pro Yearly',  display: '₹4,000' } // ₹4000 = 400000 paise
+};
+
+function startPayment() {
+  const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+  if (!user) {
+    // Not logged in — show signup first
+    openModal();
+    switchTab('signup');
+    return;
+  }
+  closeTrialPopup();
+  document.getElementById('paymentModal').classList.add('active');
+}
+
+function closePaymentModal() {
+  document.getElementById('paymentModal').classList.remove('active');
+  document.getElementById('paymentSuccess').classList.add('hidden');
+  document.getElementById('planSelect').classList.remove('hidden');
+}
+
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('plan-' + plan).classList.add('active');
+  document.getElementById('check-monthly').classList.toggle('hidden', plan !== 'monthly');
+  document.getElementById('check-yearly').classList.toggle('hidden', plan !== 'yearly');
+  document.getElementById('payNowBtn').innerHTML =
+    `<i class="fas fa-lock"></i> Pay ${plans[plan].display} — Secure Checkout`;
+}
+
+async function initiateRazorpay() {
+  const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+  const plan = plans[selectedPlan];
+  const btn = document.getElementById('payNowBtn');
+
+  if (RAZORPAY_KEY === 'YOUR_RAZORPAY_KEY_ID') {
+    // Demo mode — simulate payment
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+    await new Promise(r => setTimeout(r, 1500));
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+    simulatePaymentSuccess('demo_pay_' + Date.now(), plan);
+    return;
+  }
+
+  // Create order on backend first
+  btn.textContent = 'Creating order...';
+  btn.disabled = true;
+
+  try {
+    const orderRes = await fetch('http://localhost:3000/api/payment/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` },
+      body: JSON.stringify({ plan: selectedPlan, amount: plan.amount })
+    });
+    const orderData = await orderRes.json();
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+
+    if (!orderData.order_id) { alert('Could not create order. Please try again.'); return; }
+
+    // Open Razorpay checkout
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: plan.amount,
+      currency: 'INR',
+      name: 'DeepDetect',
+      description: plan.label,
+      image: 'https://img.icons8.com/color/64/shield.png',
+      order_id: orderData.order_id,
+      prefill: {
+        name: user?.name || '',
+        email: user?.email || '',
+        contact: ''
+      },
+      theme: { color: '#7F77DD' },
+      handler: async function(response) {
+        // Verify payment on backend
+        const verifyRes = await fetch('http://localhost:3000/api/payment/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            plan: selectedPlan
+          })
+        });
+        const verifyData = await verifyRes.json();
+        if (verifyData.success) {
+          // Update local user plan
+          const u = JSON.parse(localStorage.getItem('dd_user') || '{}');
+          u.plan = 'paid';
+          localStorage.setItem('dd_user', JSON.stringify(u));
+          simulatePaymentSuccess(response.razorpay_payment_id, plan);
+        } else {
+          alert('Payment verification failed. Please contact support.');
+        }
+      },
+      modal: { ondismiss: () => console.log('Payment cancelled') }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', e => alert('Payment failed: ' + e.error.description));
+    rzp.open();
+
+  } catch(err) {
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+    alert('Error: ' + err.message);
+  }
+}
+
+function simulatePaymentSuccess(paymentId, plan) {
+  // Update user plan locally
+  const u = JSON.parse(localStorage.getItem('dd_user') || '{}');
+  u.plan = 'paid';
+  localStorage.setItem('dd_user', JSON.stringify(u));
+
+  // Also update on backend
+  fetch('http://localhost:3000/api/upgrade', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` }
+  });
+
+  // Show success screen
+  document.getElementById('planSelect').classList.add('hidden');
+  document.getElementById('paymentSuccess').classList.remove('hidden');
+  document.getElementById('successPlan').textContent = plan.label;
+  document.getElementById('successAmount').textContent = plan.display;
+  document.getElementById('successPayId').textContent = paymentId;
+  updateNavbar(u);
+}
+
+document.getElementById('paymentModal').addEventListener('click', function(e) {
+  if (e.target === this) closePaymentModal();
+});
+
+// Theme
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('themeIcon');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    icon.className = 'fas fa-moon';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    icon.className = 'fas fa-sun';
+  }
+}
+
+// Modal
+function openModal() { document.getElementById('authModal').classList.add('active'); }
+function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+function switchTab(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+}
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { alert("Please enter email and password"); return; }
+  try {
+    const res = await fetch("http://localhost:5000/api/login", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem("dd_token", data.token);
+      localStorage.setItem("dd_user", JSON.stringify(data.user));
+      closeModal(); updateNavbar(data.user);
+      if (data.trialExpired) document.getElementById("trialPopup").classList.add("active");
+    } else { alert(data.error || "Login failed"); }
+  } catch { alert("Cannot connect to server. Make sure npm run dev is running."); }
+}
+
+async function handleSignup() {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  if (!name || !email || !password) { alert("All fields are required"); return; }
+  try {
+    const res = await fetch("http://localhost:5000/api/signup", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem("dd_token", data.token);
+      localStorage.setItem("dd_user", JSON.stringify(data.user));
+      closeModal(); updateNavbar(data.user);
+    } else { alert(data.error || "Signup failed"); }
+  } catch { alert("Cannot connect to server. Make sure npm run dev is running."); }
+}
+
+// ── FORGOT PASSWORD FLOW ─────────────────────
+let resetEmail = '';
+let resetCode = '';
+
+function showForgotPassword() {
+  hideAllForms();
+  document.getElementById('forgotForm').classList.remove('hidden');
+  document.querySelector('.modal-tabs').style.display = 'none';
+}
+function showLogin() {
+  hideAllForms();
+  document.getElementById('loginForm').classList.remove('hidden');
+  document.querySelector('.modal-tabs').style.display = 'flex';
+}
+function showVerify() {
+  hideAllForms();
+  document.getElementById('verifyForm').classList.remove('hidden');
+  document.querySelector('.modal-tabs').style.display = 'none';
+}
+function hideAllForms() {
+  ['loginForm','signupForm','forgotForm','verifyForm','newPassForm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { alert("Please enter your email address"); return; }
+  const btn = document.querySelector('#forgotForm .modal-btn');
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  try {
+    const res = await fetch("http://localhost:5000/api/forgot-password", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Code';
+    btn.disabled = false;
+    if (data.success) {
+      resetEmail = email;
+      resetCode = data.code;
+      document.getElementById('verifySubtext').innerHTML =
+        `Code sent to <b>${email}</b><br><span style="color:var(--accent);font-size:13px;">Demo code: <b style="letter-spacing:2px">${data.code}</b></span>`;
+      showVerify();
+      setTimeout(() => document.querySelector('.code-box') && document.querySelector('.code-box').focus(), 100);
+    } else { alert(data.error || "Email not found. Please check and try again."); }
+  } catch {
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Code';
+    btn.disabled = false;
+    alert("Cannot connect to server.");
+  }
+}
+
+function codeInput(el, index) {
+  el.value = el.value.replace(/[^0-9]/g, '');
+  if (el.value && index < 5) document.querySelectorAll('.code-box')[index + 1].focus();
+}
+
+function handleVerifyCode() {
+  const boxes = document.querySelectorAll('.code-box');
+  const entered = Array.from(boxes).map(b => b.value).join('');
+  if (entered.length < 6) { alert("Please enter the complete 6-digit code"); return; }
+  if (entered !== resetCode) {
+    alert("Incorrect code. Please try again.");
+    boxes.forEach(b => { b.value = ''; b.style.borderColor = 'var(--danger)'; });
+    boxes[0].focus();
+    return;
+  }
+  boxes.forEach(b => b.style.borderColor = 'var(--success)');
+  setTimeout(() => {
+    hideAllForms();
+    document.getElementById('newPassForm').classList.remove('hidden');
+  }, 400);
+}
+
+async function handleSetNewPassword() {
+  const p1 = document.getElementById('newPass1').value;
+  const p2 = document.getElementById('newPass2').value;
+  if (!p1 || !p2) { alert("Please fill in both fields"); return; }
+  if (p1.length < 6) { alert("Password must be at least 6 characters"); return; }
+  if (p1 !== p2) { alert("Passwords do not match"); return; }
+  const btn = document.querySelector('#newPassForm .modal-btn');
+  btn.textContent = 'Updating...'; btn.disabled = true;
+  try {
+    const res = await fetch("http://localhost:5000/api/reset-password", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: resetEmail, code: resetCode, newPassword: p1 })
+    });
+    const data = await res.json();
+    btn.innerHTML = '<i class="fas fa-lock"></i> Update Password';
+    btn.disabled = false;
+    if (data.success) {
+      hideAllForms();
+      document.querySelector('.modal-tabs').style.display = 'flex';
+      document.querySelector('.modal-card').insertAdjacentHTML('beforeend', `
+        <div style="text-align:center;padding:2rem 0;">
+          <div style="font-size:3.5rem;color:var(--success);margin-bottom:1rem;">✓</div>
+          <h2 style="color:var(--text);margin-bottom:0.5rem;">Password Updated!</h2>
+          <p style="color:var(--text-secondary);margin-bottom:1.5rem;">You can now sign in with your new password.</p>
+          <button class="modal-btn" onclick="closeModal();location.reload()">Go to Sign In</button>
+        </div>
+      `);
+    } else { alert(data.error || "Failed to reset password"); }
+  } catch {
+    btn.innerHTML = '<i class="fas fa-lock"></i> Update Password';
+    btn.disabled = false;
+    alert("Cannot connect to server.");
+  }
+}
+
+function togglePassVis(id, icon) {
+  const input = document.getElementById(id);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  icon.className = input.type === 'password' ? 'fas fa-eye toggle-pass' : 'fas fa-eye-slash toggle-pass';
+}
+
+// Password strength
+document.addEventListener('DOMContentLoaded', () => {
+  const p1 = document.getElementById('newPass1');
+  if (!p1) return;
+  p1.addEventListener('input', () => {
+    const v = p1.value; const s = document.getElementById('passStrength');
+    if (!v) { s.innerHTML = ''; return; }
+    let score = [v.length >= 8, /[A-Z]/.test(v), /[0-9]/.test(v), /[^A-Za-z0-9]/.test(v)].filter(Boolean).length;
+    const labels = ['','Weak','Fair','Good','Strong'];
+    const colors = ['','var(--danger)','var(--warn)','#7F77DD','var(--success)'];
+    s.innerHTML = `<div style="display:flex;align-items:center;gap:6px;margin-top:6px;">${[1,2,3,4].map(i=>`<div style="flex:1;height:3px;border-radius:3px;background:${i<=score?colors[score]:'var(--border)'};transition:all 0.3s"></div>`).join('')}<span style="font-size:11px;color:${colors[score]};font-weight:600;min-width:40px">${labels[score]}</span></div>`;
+  });
+});
+
+
+function getInitials(name) {
+  return name.trim().split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+}
+
+function updateNavbar(user) {
+  const navRight = document.querySelector(".nav-right");
+  if (!navRight || !user) return;
+  navRight.innerHTML = `
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <i class="fas fa-sun" id="themeIcon"></i>
+    </button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;">${getInitials(user.name)}</div>
+      <div style="display:flex;flex-direction:column;line-height:1.2;">
+        <span style="font-size:14px;font-weight:600;color:var(--text)">${user.name}</span>
+        <span style="font-size:11px;color:var(--accent);font-weight:600;">${user.plan === 'paid' ? '⭐ Pro Plan' : '🕐 Free Trial'}</span>
+      </div>
+    </div>
+    <button class="nav-btn outline" onclick="logoutUser()">Sign Out</button>
+  `;
+  // re-attach cursor listeners
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => { outer.classList.add('hover'); inner.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { outer.classList.remove('hover'); inner.classList.remove('hover'); });
+  });
+}
+
+function logoutUser() {
+  localStorage.removeItem("dd_token");
+  localStorage.removeItem("dd_user");
+  location.reload();
+}
+
+// Auto-restore session on page load
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("dd_user") || "null");
+  if (user) updateNavbar(user);
+});
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Trial popup (show after 8s for demo)
+
+function closeTrialPopup() { /* popup removed */ }
+
+// Mobile menu
+function toggleMobileMenu() {
+  document.querySelector('.nav-links').classList.toggle('mobile-open');
+}
+
+</script>
+</body>
+</html>

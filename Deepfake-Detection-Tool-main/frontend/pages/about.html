@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About & Contact – DeepDetect</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="tab-content" id="loginForm">
+      <h2>Welcome back</h2>
+      <input type="email" id="loginEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="loginPassword" placeholder="Password" class="modal-input">
+      <button class="modal-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+    <div class="tab-content hidden" id="signupForm">
+      <h2>Start free trial</h2>
+      <div class="trial-badge"><i class="fas fa-gift"></i> 7-Day Free Trial</div>
+      <input type="text" id="signupName" placeholder="Full name" class="modal-input">
+      <input type="email" id="signupEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="signupPassword" placeholder="Create password" class="modal-input">
+      <button class="modal-btn" onclick="handleSignup()">Start Free Trial</button>
+    </div>
+  </div>
+</div>
+
+
+
+<header class="site-header">
+  <nav class="navbar">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <span class="logo-text">DeepDetect</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="../index.html">Detector</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+      <button class="nav-btn outline" onclick="switchTab('login'); openModal()">Sign In</button>
+      <button class="nav-btn filled" onclick="switchTab('signup'); openModal()">Free Trial <span class="badge">7 Days</span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="panel-hero about-hero">
+  <div class="hero-bg"><div class="hero-grid"></div><div class="hero-glow g1"></div></div>
+  <div class="panel-hero-content">
+    <div class="hero-tag"><span class="pulse-dot"></span>Our Story</div>
+    <h1>About <span class="gradient-text">DeepDetect</span></h1>
+    <p>Where fraud ends, certainty begins. We're building the world's most accurate AI deepfake detection platform.</p>
+  </div>
+</section>
+
+<main class="about-main">
+  <div class="container">
+
+    <div class="about-grid">
+      <div class="about-text-card">
+        <div class="about-icon"><i class="fas fa-bullseye"></i></div>
+        <h2>Our Mission</h2>
+        <p>Establishing absolute trust in the digital world by pioneering real-time, irrefutable deepfake detection technology. We are committed to developing AI-powered defense algorithms that instantaneously expose synthetic media, safeguarding digital identity and ensuring the integrity of visual information for both individuals and enterprises.</p>
+      </div>
+      <div class="about-text-card">
+        <div class="about-icon"><i class="fas fa-eye"></i></div>
+        <h2>Our Vision</h2>
+        <p>A future where synthetic media cannot deceive. We believe transparency and authenticity are fundamental rights in the digital age. Our platform arms journalists, law enforcement, corporations, and everyday users with the forensic tools once reserved for government agencies.</p>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div class="section-label" style="text-align:center; margin: 3rem 0 0.5rem;">THE TEAM</div>
+    <h2 class="section-title" style="text-align:center; margin-bottom:2rem;">Built by Researchers</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="../diksha.jpg" alt="Diksha Asnora">
+        <h4>Diksha Asnora</h4>
+        <span>Frontend/Backend Developer</span>
+        <p>Architected the end-to-end web application, integrating Deepfake detection APIs with a seamless user interface.</p>
+        <div class="team-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div>
+      </div>
+      <div class="team-card">
+        <img src="../harshit.jpg" alt="Harshit Mehra">
+        <h4>Harshit Mehra</h4>
+        <span>Documentation/Database</span>
+        <p>Manages system architecture documentation and optimized database schemas for efficient handling of media metadata.</p>
+        <div class="team-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div>
+      </div>
+      <div class="team-card">
+        <img src="../krish.jpg" alt="Krish Lal Shrivastava">
+        <h4>Krish Lal Shrivastava</h4>
+        <span>Frontend/Backend Developer</span>
+        <p>Developed the server-side logic and real-time processing pipelines to ensure low-latency analysis of uploaded content.<p>
+        <div class="team-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div>
+      </div>
+      <div class="team-card">
+        <img src="../shreya.jpg" alt="Shreya Gupta">
+        <h4>Shreya Gupta</h4>
+        <span>Researcher</span>
+        <p>Focused on the comparative analysis of GAN-based forensics and fine-tuning detection models for high accuracy.</p>
+        <div class="team-socials"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section-label" style="text-align:center; margin:3rem 0 0.5rem;">GET IN TOUCH</div>
+    <h2 class="section-title" style="text-align:center; margin-bottom:2rem;">Contact Us</h2>
+    <div class="contact-grid-new">
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <h4>Email</h4>
+        <a href="mailto:dikshaasnora42@gmail.com">dikshaasnora42@gmail.com</a>
+        <p>We respond within 24 hours</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+        <h4>WhatsApp</h4>
+        <a href="https://wa.me/7303613404">+91 730 361 3404</a>
+        <p>Mon–Sat, 9 AM – 6 PM IST</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fab fa-github"></i></div>
+        <h4>GitHub</h4>
+        <a href="#">github.com/deepdetect</a>
+        <p>Open source contributions welcome</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <p>© 2026 Deepfake Detection Project. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('themeIcon');
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  icon.className = html.getAttribute('data-theme') === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+function openModal() { document.getElementById('authModal').classList.add('active'); }
+function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+function switchTab(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+}
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { alert("Please enter email and password"); return; }
+  try {
+    const res = await fetch("http://localhost:5000/api/login", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({email,password}) });
+    const data = await res.json();
+    if (data.success) { localStorage.setItem("dd_token",data.token); localStorage.setItem("dd_user",JSON.stringify(data.user)); closeModal(); updateNavbar(data.user); }
+    else { alert(data.error||"Login failed"); }
+  } catch { alert("Cannot connect to server."); }
+}
+async function handleSignup() {
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  if (!name||!email||!password) { alert("All fields required"); return; }
+  try {
+    const res = await fetch("http://localhost:5000/api/signup", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({name,email,password}) });
+    const data = await res.json();
+    if (data.success) { localStorage.setItem("dd_token",data.token); localStorage.setItem("dd_user",JSON.stringify(data.user)); closeModal(); updateNavbar(data.user); }
+    else { alert(data.error||"Signup failed"); }
+  } catch { alert("Cannot connect to server."); }
+}
+function getInitials(name) { return name.trim().split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2); }
+function updateNavbar(user) {
+  const navRight = document.querySelector(".nav-right");
+  if (!navRight||!user) return;
+  navRight.innerHTML = `<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;">${getInitials(user.name)}</div><div style="display:flex;flex-direction:column;line-height:1.2;"><span style="font-size:14px;font-weight:600;color:var(--text)">${user.name}</span><span style="font-size:11px;color:var(--accent);font-weight:600;">${user.plan==='paid'?'⭐ Pro Plan':'🕐 Free Trial'}</span></div></div><button class="nav-btn outline" onclick="logoutUser()">Sign Out</button>`;
+}
+function logoutUser() { localStorage.removeItem("dd_token"); localStorage.removeItem("dd_user"); location.reload(); }
+document.addEventListener("DOMContentLoaded", () => { const user = JSON.parse(localStorage.getItem("dd_user")||"null"); if (user) updateNavbar(user); });
+document.getElementById('authModal').addEventListener('click', function(e) { if (e.target===this) closeModal(); });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Deepfake Detector Panel – DeepDetect</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="tab-content" id="loginForm">
+      <h2>Welcome back</h2>
+      <p class="modal-sub">Sign in to access your detection history</p>
+      <input type="email" id="loginEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="loginPassword" placeholder="Password" class="modal-input">
+      <button class="modal-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+    <div class="tab-content hidden" id="signupForm">
+      <h2>Start free trial</h2>
+      <p class="modal-sub">7 days free — no credit card required</p>
+      <div class="trial-badge"><i class="fas fa-gift"></i> 7-Day Free Trial Included</div>
+      <input type="text" id="signupName" placeholder="Full name" class="modal-input">
+      <input type="email" id="signupEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="signupPassword" placeholder="Create password" class="modal-input">
+      <p class="terms-note">After trial, ₹500/month. Cancel anytime.</p>
+      <button class="modal-btn" onclick="handleSignup()">Start Free Trial</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal-card" style="max-width:480px;">
+    <button class="modal-close" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
+
+    <div id="planSelect">
+      <h2 style="margin-bottom:0.25rem;">Choose Your Plan</h2>
+      <p class="modal-sub">Unlock full access to DeepDetect</p>
+
+      <div class="plan-cards">
+        <div class="plan-card active" id="plan-monthly" onclick="selectPlan('monthly')">
+          <div class="plan-check" id="check-monthly"><i class="fas fa-check-circle"></i></div>
+          <div class="plan-name">MONTHLY</div>
+          <div class="plan-price" style="font-size:2rem;line-height:1.2;">₹500<span style="font-size:0.55em;font-weight:400">/month</span></div>
+          <div class="plan-desc">Billed every month. Cancel anytime.</div>
+        </div>
+        <div class="plan-card" id="plan-yearly" onclick="selectPlan('yearly')">
+          <div class="plan-check hidden" id="check-yearly"><i class="fas fa-check-circle"></i></div>
+          <div class="plan-badge-save">Save 33%</div>
+          <div class="plan-name">YEARLY</div>
+          <div class="plan-price" style="font-size:1.7rem;line-height:1.2;">₹4,000<span style="font-size:0.5em;font-weight:400">/year</span></div>
+          <div class="plan-desc">₹333/month. Best value.</div>
+        </div>
+      </div>
+
+      <div class="payment-features">
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Unlimited image &amp; video detections</div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Downloadable forensic PDF reports</div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> Priority AI processing</div>
+        <div class="pf-item"><i class="fas fa-check-circle"></i> API access for developers</div>
+      </div>
+
+      <!-- Payment methods + UPI ID display -->
+      <div class="payment-methods">
+        <span>Accepted:</span>
+        <img src="https://img.icons8.com/color/32/visa.png" alt="Visa" title="Visa">
+        <img src="https://img.icons8.com/color/32/mastercard.png" alt="Mastercard" title="Mastercard">
+        <img src="https://img.icons8.com/color/32/bhim-upi.png" alt="UPI" title="UPI">
+        <span style="font-size:12px;background:var(--bg3);padding:3px 8px;border-radius:6px;color:var(--text-secondary)">NetBanking</span>
+        <span style="font-size:12px;background:var(--bg3);padding:3px 8px;border-radius:6px;color:var(--text-secondary)">Wallets</span>
+      </div>
+
+      <!-- UPI ID direct payment box -->
+      <div style="margin-top:10px;padding:10px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);font-size:13px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+        <div>
+          <i class="fas fa-qrcode" style="color:var(--accent)"></i>
+          &nbsp;<strong>Direct UPI:</strong>
+          <span id="upiIdDisplay" style="color:var(--accent);font-weight:600;letter-spacing:0.5px;margin-left:4px;">dikshaasnora42@okicici</span>
+          <button onclick="copyUPI()" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);margin-left:6px;" title="Copy UPI ID">
+            <i class="fas fa-copy" id="copyIcon"></i>
+          </button>
+        </div>
+        <span style="font-size:11px;color:var(--text-secondary)">GPay · PhonePe · Paytm</span>
+      </div>
+
+      <button class="modal-btn" id="payNowBtn" onclick="initiateRazorpay()" style="margin-top:14px;">
+        <i class="fas fa-lock"></i> Pay Securely with Razorpay
+      </button>
+      <p style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:8px;">
+        🔒 256-bit SSL encryption · Powered by Razorpay
+      </p>
+    </div>
+
+    <!-- Payment success screen -->
+    <div id="paymentSuccess" class="hidden" style="text-align:center;padding:1rem 0;">
+      <div style="font-size:4rem;margin-bottom:1rem;">🎉</div>
+      <h2 style="color:var(--success);margin-bottom:0.5rem;">Payment Successful!</h2>
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Your account has been upgraded to Pro. Enjoy unlimited access!</p>
+      <div style="background:var(--bg3);border-radius:12px;padding:1rem;margin-bottom:1.5rem;text-align:left;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-secondary)">Plan</span><span id="successPlan" style="font-weight:600">Pro Monthly</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--text-secondary)">Amount</span><span id="successAmount" style="font-weight:600;color:var(--success)">₹500</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text-secondary)">Payment ID</span><span id="successPayId" style="font-size:11px;color:var(--text-muted)">-</span></div>
+      </div>
+      <button class="modal-btn" onclick="closePaymentModal();location.reload()">
+        <i class="fas fa-rocket"></i> Start Using Pro
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <nav class="navbar">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <span class="logo-text">DeepDetect</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="pages/home.html">Home</a></li>
+      <li><a href="index.html" class="active">Detector</a></li>
+      <li><a href="pages/research.html">Research</a></li>
+      <li><a href="pages/about.html">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-sun" id="themeIcon"></i>
+      </button>
+      <button class="nav-btn outline" onclick="switchTab('login'); openModal()">Sign In</button>
+      <button class="nav-btn filled" onclick="switchTab('signup'); openModal()">Free Trial <span class="badge">7 Days</span></button>
+    </div>
+  </nav>
+</header>
+
+<!-- Panel Header -->
+<section class="panel-hero">
+  <div class="hero-bg"><div class="hero-grid"></div><div class="hero-glow g1"></div></div>
+  <div class="panel-hero-content">
+    <div class="hero-tag"><span class="pulse-dot"></span>Forensic AI Engine v3.1</div>
+    <h1>Agni Pariksha <span class="gradient-text">— The Truth Test</span></h1>
+    <p>Upload your image and let our multi-layer AI forensic engine reveal the truth with pixel-level precision.</p>
+  </div>
+</section>
+
+<!-- Main Detector -->
+<main class="detector-wrap">
+  <div class="detector-container">
+
+    <div class="upload-section">
+      <div id="drop-area" class="drop-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave()" ondrop="handleDrop(event)">
+        <div class="drop-inner" id="dropInner">
+          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <h3>Drop your file here</h3>
+          <p>Supports JPG, PNG, WEBP, GIF, MP4, MP3, WAV</p>
+          <button class="upload-btn-main" onclick="document.getElementById('fileInput').click()">
+            <i class="fas fa-folder-open"></i> Browse Files
+          </button>
+          <input type="file" id="fileInput" accept="image/*,video/*,audio/*" hidden onchange="handleFileSelect(event)">
+          <div class="upload-options">
+            <button class="upload-opt" title="Take photo"><i class="fas fa-camera"></i> Camera</button>
+            <button class="upload-opt" title="Paste URL" onclick="pasteURL()"><i class="fas fa-link"></i> Paste URL</button>
+            <button class="upload-opt" title="Clear" onclick="clearAll()" id="clearBtn" style="display:none"><i class="fas fa-trash"></i> Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="detect-btn" id="detectBtn" onclick="runDetection()" disabled>
+        <i class="fas fa-crosshairs"></i>
+        <span>Analyze for Deepfakes</span>
+        <div class="btn-shimmer"></div>
+      </button>
+
+      <div class="analysis-info">
+        <div class="info-item"><i class="fas fa-clock"></i> Avg. 2.4 seconds</div>
+        <div class="info-item"><i class="fas fa-lock"></i> Files not stored</div>
+        <div class="info-item"><i class="fas fa-check-circle"></i> 98.7% accuracy</div>
+      </div>
+    </div>
+
+    <div class="results-panel" id="resultsPanel">
+      <div class="results-placeholder" id="resultsPlaceholder">
+        <i class="fas fa-search-plus"></i>
+        <p>Upload an image to begin forensic analysis</p>
+      </div>
+
+      <div class="results-content hidden" id="resultsContent">
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-icon" id="verdictIcon"><i class="fas fa-spinner fa-spin"></i></div>
+          <div class="verdict-info">
+            <div class="verdict-label">Overall Verdict</div>
+            <div class="verdict-value" id="verdictValue">Analyzing...</div>
+            <div class="verdict-conf" id="verdictConf"></div>
+          </div>
+          <div class="verdict-score" id="verdictScore"></div>
+        </div>
+
+        <div class="analysis-progress" id="analysisProgress">
+          <div class="progress-item">
+            <span>GAN Fingerprint Scan</span>
+            <div class="progress-bar"><div class="progress-fill" id="p1" style="width:0%"></div></div>
+            <span class="progress-pct" id="p1t">0%</span>
+          </div>
+          <div class="progress-item">
+            <span>Pixel Pattern Analysis</span>
+            <div class="progress-bar"><div class="progress-fill" id="p2" style="width:0%"></div></div>
+            <span class="progress-pct" id="p2t">0%</span>
+          </div>
+          <div class="progress-item">
+            <span>Facial Landmark Check</span>
+            <div class="progress-bar"><div class="progress-fill" id="p3" style="width:0%"></div></div>
+            <span class="progress-pct" id="p3t">0%</span>
+          </div>
+          <div class="progress-item">
+            <span>Metadata Forensics</span>
+            <div class="progress-bar"><div class="progress-fill" id="p4" style="width:0%"></div></div>
+            <span class="progress-pct" id="p4t">0%</span>
+          </div>
+        </div>
+
+        <div class="detail-grid hidden" id="detailGrid">
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-fingerprint"></i> GAN Trace</div>
+            <div class="detail-val" id="ganVal">—</div>
+            <div class="detail-sub" id="ganSub"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-puzzle-piece"></i> Pixel Consistency</div>
+            <div class="detail-val" id="pixelVal">—</div>
+            <div class="detail-sub" id="pixelSub"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-face-smile"></i> Facial Landmarks</div>
+            <div class="detail-val" id="faceVal">—</div>
+            <div class="detail-sub" id="faceSub"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-database"></i> Metadata</div>
+            <div class="detail-val" id="metaVal">—</div>
+            <div class="detail-sub" id="metaSub"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-eye"></i> Lighting Analysis</div>
+            <div class="detail-val" id="lightVal">—</div>
+            <div class="detail-sub" id="lightSub"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-header"><i class="fas fa-compress-arrows-alt"></i> Compression</div>
+            <div class="detail-val" id="compVal">—</div>
+            <div class="detail-sub" id="compSub"></div>
+          </div>
+        </div>
+
+        <div class="report-actions hidden" id="reportActions">
+          <button class="report-btn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download PDF Report</button>
+          <button class="report-btn outline" onclick="clearAll()"><i class="fas fa-redo"></i> Analyze Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="techniques-section">
+    <div class="container">
+      <div class="section-label">DETECTION METHODS</div>
+      <h2 class="section-title">How Our AI Engine Works</h2>
+      <div class="techniques-grid">
+        <div class="tech-card">
+          <div class="tech-icon" style="color:#7F77DD"><i class="fas fa-robot"></i></div>
+          <h4>GAN Fingerprint Detection</h4>
+          <p>Generative Adversarial Networks leave subtle statistical artifacts in the frequency domain. Our CNN model has been trained on 500K+ real and fake image pairs to identify these invisible fingerprints.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-icon" style="color:#1D9E75"><i class="fas fa-wave-square"></i></div>
+          <h4>Frequency Analysis</h4>
+          <p>Real photographs have characteristic noise patterns in their high-frequency components. Deepfakes show unnatural smoothness in these bands, revealing AI generation even when visually perfect.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-icon" style="color:#EF9F27"><i class="fas fa-face-viewfinder"></i></div>
+          <h4>Facial Geometry Mapping</h4>
+          <p>We map 468 facial landmarks and check for anatomical inconsistencies — asymmetries, blending artifacts around hairlines, ears, and teeth that are telltale signs of face-swapping.</p>
+        </div>
+        <div class="tech-card">
+          <div class="tech-icon" style="color:#D4537E"><i class="fas fa-code-branch"></i></div>
+          <h4>Metadata Forensics</h4>
+          <p>Every genuine photo embeds EXIF data — camera model, GPS, timestamps. We cross-check this data for anomalies and signs of stripping or manipulation that indicate post-processing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Feedback Section -->
+<section class="feedback-section">
+  <div class="container">
+    <div class="section-label">FEEDBACK</div>
+    <h2 class="section-title">Your Voice Matters</h2>
+    <p style="color:var(--text-secondary);text-align:center;margin-bottom:2rem;">Help us improve our AI detection engine with your feedback.</p>
+    <div class="feedback-box">
+      <div class="star-rating" id="starRating">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+      </div>
+      <textarea id="feedbackText" placeholder="What did you think? Was the result accurate?"></textarea>
+      <button id="submitFeedback" class="modal-btn">Submit Feedback</button>
+    </div>
+    <div class="reviews-container">
+      <h3>User Reviews</h3>
+      <ul id="reviewsList"></ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <p>© 2026 Deepfake Detection Project. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// ── YOUR UPI ID — change this to your real UPI ID ──────────────────────────
+const YOUR_UPI_ID = 'dikshaasnora42@okicici';
+
+// ── RAZORPAY KEY — replace with your real key from razorpay.com/dashboard ──
+const RAZORPAY_KEY = 'YOUR_RAZORPAY_KEY_ID';
+
+let selectedPlan = 'monthly';
+const plans = {
+  monthly: { amount: 50000,  label: 'Pro Monthly', display: '₹500'   },
+  yearly:  { amount: 400000, label: 'Pro Yearly',  display: '₹4,000' }
+};
+
+// ── Copy UPI ID to clipboard ────────────────────────────────────────────────
+function copyUPI() {
+  navigator.clipboard.writeText(YOUR_UPI_ID).then(() => {
+    const icon = document.getElementById('copyIcon');
+    icon.className = 'fas fa-check';
+    icon.style.color = 'var(--success)';
+    setTimeout(() => { icon.className = 'fas fa-copy'; icon.style.color = ''; }, 2000);
+  });
+}
+
+// ── Plan selection ──────────────────────────────────────────────────────────
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('plan-' + plan).classList.add('active');
+  document.getElementById('check-monthly').classList.toggle('hidden', plan !== 'monthly');
+  document.getElementById('check-yearly').classList.toggle('hidden', plan !== 'yearly');
+  document.getElementById('payNowBtn').innerHTML =
+    `<i class="fas fa-lock"></i> Pay ${plans[plan].display} — Secure Checkout`;
+}
+
+// ── Start payment (called from trial popup or pricing section) ──────────────
+function startPayment() {
+  const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+  if (!user) { openModal(); switchTab('signup'); return; }
+  closeTrialPopup();
+  document.getElementById('paymentModal').classList.add('active');
+}
+
+function closePaymentModal() {
+  document.getElementById('paymentModal').classList.remove('active');
+  document.getElementById('paymentSuccess').classList.add('hidden');
+  document.getElementById('planSelect').classList.remove('hidden');
+}
+
+// ── Razorpay checkout ───────────────────────────────────────────────────────
+async function initiateRazorpay() {
+  const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+  const plan = plans[selectedPlan];
+  const btn  = document.getElementById('payNowBtn');
+
+  if (RAZORPAY_KEY === 'YOUR_RAZORPAY_KEY_ID') {
+    // Demo mode — simulate payment success
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+    await new Promise(r => setTimeout(r, 1500));
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+    simulatePaymentSuccess('demo_pay_' + Date.now(), plan);
+    return;
+  }
+
+  btn.textContent = 'Creating order...';
+  btn.disabled = true;
+
+  try {
+    const orderRes = await fetch('http://localhost:3000/api/payment/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` },
+      body: JSON.stringify({ plan: selectedPlan, amount: plan.amount })
+    });
+    const orderData = await orderRes.json();
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+
+    if (!orderData.order_id) { alert('Could not create order. Please try again.'); return; }
+
+    const options = {
+      key: RAZORPAY_KEY,
+      amount: plan.amount,
+      currency: 'INR',
+      name: 'DeepDetect',
+      description: plan.label,
+      image: 'https://img.icons8.com/color/64/shield.png',
+      order_id: orderData.order_id,
+      // ── Enable all payment methods including UPI ──
+      method: { upi: true, card: true, netbanking: true, wallet: true },
+      // ── UPI config — shows UPI first ──
+      config: {
+        display: {
+          blocks: {
+            upi_block: {
+              name: 'Pay via UPI',
+              instruments: [{ method: 'upi', flows: ['collect', 'intent', 'qr'] }]
+            }
+          },
+          sequence: ['block.upi_block'],
+          preferences: { show_default_blocks: true }
+        }
+      },
+      prefill: {
+        name:    user?.name  || '',
+        email:   user?.email || '',
+        contact: '',
+        vpa:     YOUR_UPI_ID  // pre-fills your UPI ID for collect requests
+      },
+      theme: { color: '#7F77DD' },
+      handler: async function(response) {
+        const verifyRes = await fetch('http://localhost:3000/api/payment/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` },
+          body: JSON.stringify({
+            razorpay_order_id:   response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature:  response.razorpay_signature,
+            plan: selectedPlan
+          })
+        });
+        const verifyData = await verifyRes.json();
+        if (verifyData.success) {
+          const u = JSON.parse(localStorage.getItem('dd_user') || '{}');
+          u.plan = 'paid';
+          localStorage.setItem('dd_user', JSON.stringify(u));
+          simulatePaymentSuccess(response.razorpay_payment_id, plan);
+        } else {
+          alert('Payment verification failed. Please contact support.');
+        }
+      },
+      modal: { ondismiss: () => console.log('Payment cancelled') }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', e => alert('Payment failed: ' + e.error.description));
+    rzp.open();
+
+  } catch(err) {
+    btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with Razorpay';
+    btn.disabled = false;
+    alert('Error: ' + err.message);
+  }
+}
+
+function simulatePaymentSuccess(paymentId, plan) {
+  const u = JSON.parse(localStorage.getItem('dd_user') || '{}');
+  u.plan = 'paid';
+  localStorage.setItem('dd_user', JSON.stringify(u));
+  fetch('http://localhost:3000/api/upgrade', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${localStorage.getItem('dd_token')}` }
+  });
+  document.getElementById('planSelect').classList.add('hidden');
+  document.getElementById('paymentSuccess').classList.remove('hidden');
+  document.getElementById('successPlan').textContent   = plan.label;
+  document.getElementById('successAmount').textContent = plan.display;
+  document.getElementById('successPayId').textContent  = paymentId;
+  updateNavbar(u);
+}
+
+document.getElementById('paymentModal').addEventListener('click', function(e) {
+  if (e.target === this) closePaymentModal();
+});
+
+// ── Theme ───────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('themeIcon');
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  icon.className = html.getAttribute('data-theme') === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// ── Modal ───────────────────────────────────────────────────────────────────
+function openModal()  { document.getElementById('authModal').classList.add('active'); }
+function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+function switchTab(tab) {
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+}
+
+// ── Auth ────────────────────────────────────────────────────────────────────
+async function handleLogin() {
+  const email    = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { alert('Please enter email and password'); return; }
+  try {
+    const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" ? "http://localhost:5000" : "https://your-backend-url.onrender.com";
+    const res  = await fetch(`${BASE_URL}/api/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('dd_token', data.token);
+      localStorage.setItem('dd_user', JSON.stringify(data.user));
+      closeModal();
+      updateNavbar(data.user);
+      // Show trial expired popup immediately if backend says so
+      if (data.trialExpired) {
+        setTimeout(() => document.getElementById('trialPopup').classList.add('active'), 800);
+      }
+    } else { alert(data.error || 'Login failed'); }
+  } catch { alert('Cannot connect to server. Make sure npm run dev is running.'); }
+}
+
+async function handleSignup() {
+  const name     = document.getElementById('signupName').value;
+  const email    = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  if (!name || !email || !password) { alert('All fields required'); return; }
+  try {
+    const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" ? "http://localhost:5000" : "https://your-backend-url.onrender.com";
+    const res  = await fetch(`${BASE_URL}/api/signup`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      localStorage.setItem('dd_token', data.token);
+      localStorage.setItem('dd_user', JSON.stringify(data.user));
+      closeModal();
+      updateNavbar(data.user);
+    } else { alert(data.error || 'Signup failed'); }
+  } catch { alert('Cannot connect to server.'); }
+}
+
+// ── Navbar helpers ──────────────────────────────────────────────────────────
+function getInitials(name) {
+  return name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function updateNavbar(user) {
+  const navRight = document.querySelector('.nav-right');
+  if (!navRight || !user) return;
+  navRight.innerHTML = `
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;">${getInitials(user.name)}</div>
+      <div style="display:flex;flex-direction:column;line-height:1.2;">
+        <span style="font-size:14px;font-weight:600;color:var(--text)">${user.name}</span>
+        <span style="font-size:11px;color:var(--accent);font-weight:600;">${user.plan === 'paid' ? '⭐ Pro Plan' : '🕐 Free Trial'}</span>
+      </div>
+    </div>
+    <button class="nav-btn outline" onclick="logoutUser()">Sign Out</button>`;
+}
+
+function logoutUser() {
+  localStorage.removeItem('dd_token');
+  localStorage.removeItem('dd_user');
+  location.reload();
+}
+
+// ── Trial expiry — no popup shown (removed)
+function checkTrialExpiry() {}
+
+// ── Restore session + check trial on every page load ───────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+  if (user) {
+    updateNavbar(user);
+    checkTrialExpiry(); // ← real 7-day check, not a setTimeout
+  }
+});
+
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function closeTrialPopup() { /* popup removed */ }
+
+// ── File upload / detection ─────────────────────────────────────────────────
+let hasImage = false;
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('drop-area').classList.add('drag-active');
+}
+function handleDragLeave() {
+  document.getElementById('drop-area').classList.remove('drag-active');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-area').classList.remove('drag-active');
+  const file = e.dataTransfer.files[0];
+  if (file) loadFile(file);
+}
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) loadFile(file);
+}
+function loadFile(file) {
+  selectedFile = file; // ✅ STORE FILE
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const inner = document.getElementById('dropInner');
+    inner.innerHTML = `
+      <img src="${e.target.result}" alt="Uploaded" class="preview-img">
+      <p class="preview-name">${file.name} (${(file.size/1024).toFixed(1)} KB)</p>`;
+    document.getElementById('detectBtn').disabled = false;
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) clearBtn.style.display = 'flex';
+    hasImage = true;
+  };
+  reader.readAsDataURL(file);
+}
+function clearAll() {
+  document.getElementById('dropInner').innerHTML = `
+    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+    <h3>Drop your file here</h3>
+    <p>Supports JPG, PNG, WEBP, GIF, MP4, MP3, WAV</p>
+    <button class="upload-btn-main" onclick="document.getElementById('fileInput').click()">
+      <i class="fas fa-folder-open"></i> Browse Files
+    </button>
+    <input type="file" id="fileInput" accept="image/*,video/*,audio/*" hidden onchange="handleFileSelect(event)">
+    <div class="upload-options">
+      <button class="upload-opt"><i class="fas fa-camera"></i> Camera</button>
+      <button class="upload-opt" onclick="pasteURL()"><i class="fas fa-link"></i> Paste URL</button>
+      <button class="upload-opt" onclick="clearAll()" id="clearBtn" style="display:none"><i class="fas fa-trash"></i> Clear</button>
+    </div>`;
+  document.getElementById('detectBtn').disabled = true;
+  document.getElementById('resultsContent').classList.add('hidden');
+  document.getElementById('resultsPlaceholder').classList.remove('hidden');
+  document.getElementById('detailGrid').classList.add('hidden');
+  document.getElementById('reportActions').classList.add('hidden');
+  hasImage = false;
+}
+function pasteURL() {
+  const url = prompt('Paste image URL:');
+  if (url) {
+    document.getElementById('dropInner').innerHTML = `<img src="${url}" alt="URL Image" class="preview-img" onerror="this.src='https://placehold.co/300x200?text=Image+Not+Found'">`;
+    document.getElementById('detectBtn').disabled = false;
+  }
+}
+
+function downloadReport() {
+  alert('PDF report download would be generated here in the full version.');
+}
+
+</script>
+<script src="assets/js/script.js" defer></script>
+</body>
+</html>

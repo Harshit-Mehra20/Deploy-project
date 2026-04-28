@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Paper – DeepDetect</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+
+
+<div class="modal-overlay" id="authModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="tab-content" id="loginForm">
+      <h2>Welcome back</h2>
+      <input type="email" id="loginEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="loginPassword" placeholder="Password" class="modal-input">
+      <button class="modal-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+    <div class="tab-content hidden" id="signupForm">
+      <h2>Start free trial</h2>
+      <div class="trial-badge"><i class="fas fa-gift"></i> 7-Day Free Trial</div>
+      <input type="text" id="signupName" placeholder="Full name" class="modal-input">
+      <input type="email" id="signupEmail" placeholder="Email address" class="modal-input">
+      <input type="password" id="signupPassword" placeholder="Create password" class="modal-input">
+      <button class="modal-btn" onclick="handleSignup()">Start Free Trial</button>
+    </div>
+  </div>
+</div>
+
+
+
+<header class="site-header">
+  <nav class="navbar">
+    <div class="logo-wrap">
+      <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+      <span class="logo-text">DeepDetect</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="../index.html">Detector</a></li>
+      <li><a href="research.html" class="active">Research</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun" id="themeIcon"></i></button>
+      <button class="nav-btn outline" onclick="switchTab('login'); openModal()">Sign In</button>
+      <button class="nav-btn filled" onclick="switchTab('signup'); openModal()">Free Trial <span class="badge">7 Days</span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="panel-hero">
+  <div class="hero-bg"><div class="hero-grid"></div><div class="hero-glow g1"></div></div>
+  <div class="panel-hero-content">
+    <div class="hero-tag"><span class="pulse-dot"></span>IJIRT · Volume 12 Issue 9 · February 2026 · ISSN: 2349-6002</div>
+    <h1>Research <span class="gradient-text">Publications</span></h1>
+    <p>CNN-based deepfake image detection combined with a hybrid CNN-Transformer multimodal fusion framework — two-part study by MGM's College of Engineering and Technology.</p>
+  </div>
+</section>
+
+<main class="research-main">
+  <div class="research-layout">
+
+    <!-- TOC Sidebar -->
+    <aside class="toc-sidebar">
+      <h5>Paper 1</h5>
+      <a href="#p1-abstract">Abstract</a>
+      <a href="#p1-intro">1. Introduction</a>
+      <a href="#p1-related">2. Literature Review</a>
+      <a href="#p1-problem">3. Problem Statement</a>
+      <a href="#p1-method">4. Methodology</a>
+      <a href="#p1-design">5. System Design</a>
+      <a href="#p1-results">6. Results</a>
+      <a href="#p1-conclusion">8. Conclusion</a>
+      <a href="#p1-refs">References</a>
+
+      <h5 style="margin-top:1.5rem">Paper 2</h5>
+      <a href="#p2-abstract">Abstract</a>
+      <a href="#p2-intro">1. Introduction</a>
+      <a href="#p2-related">2. Literature Review</a>
+      <a href="#p2-problem">3. Problem Statement</a>
+      <a href="#p2-method">4. Methodology</a>
+      <a href="#p2-design">5. System Design</a>
+      <a href="#p2-results">6. Results</a>
+      <a href="#p2-conclusion">8. Conclusion</a>
+      <a href="#p2-refs">References</a>
+
+      <div class="toc-download">
+        <button class="modal-btn" style="width:100%;font-size:13px;" onclick="alert('PDF download available in full version')">
+          <i class="fas fa-file-pdf"></i> Download PDF
+        </button>
+      </div>
+    </aside>
+
+    <!-- Paper Content -->
+    <article class="paper-content">
+
+      <!-- ═══════════════════════════════════════════
+           PAPER 1
+      ═══════════════════════════════════════════ -->
+      <div class="paper-title-block">
+        <div style="font-size:12px;color:var(--accent);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Research Paper 1</div>
+        <h1 class="paper-title">Deepfake Image Detection – Real or Fake</h1>
+        <div class="paper-authors">
+          Krish Lal Srivastava<sup>1</sup>, Diksha Asnora<sup>2</sup>, Harshit Mehra<sup>3</sup>, Shreya Gupta<sup>4</sup>, Mr. Abhishek Chaudhary<sup>5</sup>
+        </div>
+        <div class="paper-affil"><sup>1,2,3,4,5</sup>Department of Computer Science and Engineering, MGM's College of Engineering and Technology, Noida, Uttar Pradesh, India</div>
+        <div class="paper-tags">
+          <span class="paper-tag">Deepfake Detection</span>
+          <span class="paper-tag">CNN</span>
+          <span class="paper-tag">Image Forensics</span>
+          <span class="paper-tag">Machine Learning</span>
+          <span class="paper-tag">IJIRT · Feb 2026</span>
+        </div>
+      </div>
+
+      <section id="p1-abstract" class="paper-section">
+        <h2>Abstract</h2>
+        <p class="paper-text">Recent progress in artificial intelligence has enabled the creation of highly convincing synthetic media, particularly deepfake images, which raise serious concerns about the reliability and trustworthiness of digital content. Deepfake images are produced using advanced deep learning techniques that can accurately imitate facial structures, expressions, and textures, making manual identification extremely challenging.</p>
+        <p class="paper-text">This research proposes a <strong>convolutional neural network (CNN)-based framework</strong> for reliable deepfake image detection. The approach emphasizes facial region preprocessing, image normalization, and data augmentation, combined with transfer learning to enhance robustness and generalization across datasets. Experimental evaluation conducted on standard benchmark datasets demonstrates that the proposed framework achieves strong detection performance while remaining computationally efficient, making it suitable for real-time and resource-constrained environments.</p>
+        <div class="paper-callout">
+          <strong>Key Finding:</strong> The proposed CNN achieves 96.8% accuracy on FaceForensics++ and 95.2% recall — offering a favorable trade-off between accuracy, efficiency, and real-time inference speed.
+        </div>
+      </section>
+
+      <section id="p1-intro" class="paper-section">
+        <h2>1. Introduction</h2>
+        <p class="paper-text">The widespread use of social media platforms and digital communication tools has led to an unprecedented growth in the creation and distribution of visual content. Alongside these advancements, artificial intelligence has enabled the development of sophisticated image manipulation techniques capable of generating highly realistic synthetic images, commonly referred to as deepfakes. These manipulated images can convincingly replicate human facial characteristics, often making them indistinguishable from real images to the human eye.</p>
+        <p class="paper-text">The misuse of deepfake technology has raised significant concerns in areas such as misinformation, identity fraud, political manipulation, and digital privacy. Fake images can be exploited to damage reputations, manipulate public opinion, or create false evidence, thereby undermining trust in digital media. As a result, ensuring the authenticity of visual content has become a critical challenge for researchers, policymakers, and forensic analysts.</p>
+        <p class="paper-text">Traditional image forensic methods rely on handcrafted features and statistical cues to identify manipulations; however, these approaches often fail when confronted with high-quality deepfake images generated using modern neural networks. In contrast, deep learning-based techniques have demonstrated superior performance by automatically learning discriminative features directly from data. Convolutional neural networks, in particular, have shown strong potential in capturing subtle visual artifacts introduced during the image synthesis process.</p>
+        <p class="paper-text">This research focuses on designing an efficient CNN-based deepfake image detection framework that balances detection accuracy with computational efficiency. By emphasizing facial region analysis and robust preprocessing strategies, the proposed system aims to perform reliably across diverse datasets and real-world conditions.</p>
+      </section>
+
+      <section id="p1-related" class="paper-section">
+        <h2>2. Literature Review</h2>
+        <p class="paper-text">The rapid evolution of deepfake generation techniques has motivated extensive research on detection strategies. Early studies in image forgery detection primarily relied on handcrafted features, including texture inconsistencies, lighting irregularities, and compression artifacts. While these methods achieved reasonable performance on simple manipulations, they struggled to generalize to deepfakes generated using advanced neural networks.</p>
+        <p class="paper-text">With the emergence of deep learning, researchers began exploring CNNs for deepfake detection. Afchar et al. introduced <strong>MesoNet</strong>, a lightweight CNN architecture designed to detect facial manipulation by analyzing mesoscopic features. Although MesoNet demonstrated promising results, its performance was limited when tested on large-scale and diverse datasets.</p>
+        <p class="paper-text">Subsequent work by Rössler et al. led to the development of the <strong>FaceForensics++</strong> dataset, which provided a comprehensive benchmark for evaluating deepfake detection methods. Using this dataset, deeper architectures such as XceptionNet achieved high detection accuracy by learning complex spatial features. However, these models often require substantial computational resources, making them less suitable for real-time applications.</p>
+        <p class="paper-text">Other researchers explored alternative approaches to improve generalization and robustness — frequency-domain analysis, capsule networks, and attention mechanisms have been proposed to capture subtle manipulation traces. Additionally, transfer learning has been widely adopted to leverage pre-trained models and improve performance on limited datasets.</p>
+        <p class="paper-text">Despite these advancements, challenges such as cross-dataset generalization, robustness to compression, and computational efficiency remain unresolved. This study builds upon existing research by proposing a compact and efficient CNN-based framework that aims to address these limitations while maintaining strong detection performance.</p>
+      </section>
+
+      <section id="p1-problem" class="paper-section">
+        <h2>3. Problem Statement</h2>
+        <p class="paper-text">Despite significant progress in deepfake image detection, several critical challenges continue to limit the effectiveness of existing solutions in real-world environments. As deepfake generation techniques evolve rapidly, detection systems must adapt to increasingly sophisticated manipulations while maintaining reliability and efficiency.</p>
+        <p class="paper-text"><strong>Cross-dataset generalization</strong> is one major challenge. Many deepfake detectors are trained and evaluated on specific datasets and exhibit strong performance only under similar data conditions. When tested on unseen datasets or new manipulation techniques, accuracy often degrades due to variations in image quality, encoding methods, and generative architectures.</p>
+        <p class="paper-text"><strong>Robustness to post-processing</strong> is another important issue. In practical scenarios, images shared across digital platforms are commonly subjected to compression, resizing, noise addition, and filtering. Such transformations can obscure forensic artifacts, causing many detection models to fail or produce unreliable predictions.</p>
+        <p class="paper-text"><strong>Explainability and interpretability</strong> also remain key concerns. Deep learning models, particularly CNNs, often function as black boxes, providing predictions without clear justification. For digital forensics, law enforcement, and content moderation, it is essential that detection systems offer interpretable outputs that help users understand the basis of classification decisions.</p>
+        <p class="paper-text">The objective of this research is to address these challenges by developing an efficient CNN-based deepfake image detection framework that emphasizes generalization, robustness, interpretability, and computational feasibility for practical deployment.</p>
+      </section>
+
+      <section id="p1-method" class="paper-section">
+        <h2>4. Methodology</h2>
+        <p class="paper-text">The proposed deepfake image detection framework follows a structured and modular methodology that includes data acquisition, preprocessing, model design, training, and evaluation.</p>
+        <p class="paper-text"><strong>Data Acquisition and Preprocessing.</strong> The datasets used include widely recognized deepfake benchmarks — FaceForensics++, Celeb-DF, and the DeepFake Detection Challenge (DFDC). Initially, facial regions are extracted from input images using a face detection and alignment process to ensure consistency in input dimensions. Each detected face is resized to a fixed resolution of 224 × 224 pixels. Pixel values are normalized to improve numerical stability during training. Data augmentation techniques such as random rotation, horizontal flipping, brightness variation, Gaussian blur, and JPEG compression are applied.</p>
+        <p class="paper-text"><strong>CNN Model Architecture.</strong> The core of the proposed system is a CNN designed to balance detection accuracy and computational efficiency. The network consists of multiple convolutional layers for feature extraction, followed by pooling layers to reduce spatial dimensionality. Fully connected layers are used for classification, while regularization techniques such as dropout and batch normalization are incorporated to improve generalization. The architecture progressively extracts hierarchical features while maintaining a compact structure suitable for real-time inference.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Layer Type</th><th>Parameters</th><th>Output Size</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Input Layer</td><td>224 × 224 × 3</td><td>224 × 224 × 3</td></tr>
+              <tr><td>Conv2D + ReLU</td><td>32 filters, 3×3</td><td>222 × 222 × 32</td></tr>
+              <tr><td>Max Pooling</td><td>2×2</td><td>111 × 111 × 32</td></tr>
+              <tr><td>Conv2D + ReLU</td><td>64 filters, 3×3</td><td>109 × 109 × 64</td></tr>
+              <tr><td>Fully Connected</td><td>128 Neurons</td><td>128</td></tr>
+              <tr class="highlight-row"><td>Output Layer</td><td>Sigmoid Activation</td><td>1</td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table II. Configuration of the Proposed CNN Model</p>
+        </div>
+
+        <p class="paper-text"><strong>Training Strategy.</strong> The model is trained using binary cross-entropy loss to differentiate between real and fake images. The Adam optimizer is employed with a low learning rate to ensure stable convergence. Transfer learning is utilized by initializing convolutional layers with pretrained weights. The dataset is divided into training, validation, and testing subsets in a 70:15:15 ratio. Early stopping is applied based on validation loss to prevent overfitting.</p>
+        <p class="paper-text"><strong>Evaluation Metrics.</strong> Model performance is evaluated using accuracy, precision, recall, F1-score, and area under the ROC curve (AUC). Cross-dataset testing is performed to assess the generalization capability of the proposed framework.</p>
+      </section>
+
+      <section id="p1-design" class="paper-section">
+        <h2>5. System Design</h2>
+        <p class="paper-text">The deepfake image detection system is designed as a modular and scalable framework that supports efficient processing, classification, and result visualization. The system architecture enables seamless data flow from image input to final prediction while allowing individual components to be upgraded independently.</p>
+        <p class="paper-text">The overall system follows a sequential pipeline beginning with image acquisition and ending with classification output. The framework consists of five interconnected functional modules:</p>
+        <p class="paper-text"><strong>1. Input Module</strong> — Accepts image inputs from uploaded files, databases, or live camera feeds supporting standard image formats.</p>
+        <p class="paper-text"><strong>2. Preprocessing Module</strong> — Detects facial regions, aligns them to a fixed resolution, and applies normalization. Data augmentation techniques are optionally applied during training.</p>
+        <p class="paper-text"><strong>3. CNN Classification Module</strong> — Preprocessed facial images are forwarded to the trained CNN model, which extracts discriminative spatial features and classifies the input as either real or fake. This module represents the core decision-making component of the system.</p>
+        <p class="paper-text"><strong>4. Decision and Confidence Module</strong> — Output probabilities generated by the CNN are processed to determine the final classification label. Confidence scores are also computed to support interpretability and informed decision-making.</p>
+        <p class="paper-text"><strong>5. Visualization and Reporting Module</strong> — Results are presented through a user-friendly interface that displays predicted labels, confidence values, and optional Grad-CAM visual explanations to highlight regions that influenced the model's decision.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Dataset Name</th><th>Type of Data</th><th>Number of Samples</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>FaceForensics++</td><td>Real &amp; Fake Faces</td><td>100,000+</td><td>Training &amp; Validation</td></tr>
+              <tr><td>DFDC</td><td>Deepfake Images</td><td>120,000+</td><td>Robustness Testing</td></tr>
+              <tr class="highlight-row"><td>Celeb-DF</td><td>Celebrity Face Images</td><td>50,000+</td><td>Generalization Evaluation</td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table I. Datasets Used for Deepfake Image Detection</p>
+        </div>
+      </section>
+
+      <section id="p1-results" class="paper-section">
+        <h2>6. Results and Discussion</h2>
+        <p class="paper-text">This section presents the performance evaluation of the proposed CNN-based deepfake image detection framework. The results are analyzed using standard classification metrics to assess detection accuracy, robustness, and computational efficiency.</p>
+        <p class="paper-text"><strong>Quantitative Performance Analysis.</strong> The proposed framework was evaluated on multiple benchmark datasets including FaceForensics++, Celeb-DF, and DFDC. As shown in Table 2, the proposed CNN achieves accuracy exceeding 90% on FaceForensics++ and Celeb-DF datasets, indicating strong detection capability. The slight performance drop observed on the DFDC dataset reflects the increased diversity and complexity of real-world deepfake samples, yet the results remain competitive.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Model</th><th>Accuracy (%)</th><th>Precision (%)</th><th>Recall (%)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>MesoNet</td><td>92.4</td><td>91.8</td><td>90.9</td></tr>
+              <tr><td>XceptionNet</td><td>94.6</td><td>94.1</td><td>93.7</td></tr>
+              <tr class="highlight-row"><td><strong>Proposed CNN Model</strong></td><td><strong>96.8</strong></td><td><strong>96.2</strong></td><td><strong>95.9</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table III. Performance Comparison of the Proposed Method</p>
+        </div>
+
+        <p class="paper-text"><strong>Qualitative Evaluation.</strong> Visual interpretability was analyzed using Grad-CAM techniques to identify regions contributing to the classification decision. The model focuses on discriminative facial regions such as the eyes, mouth, and boundary areas, where synthesis artifacts are commonly present. These visual explanations improve transparency and support trust in automated detection systems.</p>
+        <div class="paper-callout">
+          <strong>Key Insight:</strong> Although heavier architectures such as XceptionNet achieve slightly higher accuracy, they require significantly more computational resources. The proposed CNN provides a favorable trade-off between performance and inference speed, making it suitable for real-time and edge-based deployment.
+        </div>
+      </section>
+
+      <section id="p1-conclusion" class="paper-section">
+        <h2>8. Conclusion</h2>
+        <p class="paper-text">The increasing realism of deepfake images poses a serious threat to the credibility of digital media and highlights the urgent need for reliable detection mechanisms. This research presented an efficient convolutional neural network-based framework for deepfake image detection that balances accuracy, robustness, and computational efficiency. By focusing on facial region analysis, data normalization, and augmentation strategies, the proposed system is capable of identifying subtle artifacts introduced during the image synthesis process.</p>
+        <p class="paper-text">Experimental evaluation on standard benchmark datasets demonstrated that the proposed framework achieves high detection accuracy while maintaining strong generalization across different datasets. Comparative analysis showed that, although heavier deep learning models may yield slightly higher accuracy, the proposed CNN provides a favorable trade-off between performance and inference speed, making it suitable for real-time and edge-based deployment.</p>
+        <p class="paper-text">Additionally, the use of visualization techniques enhances interpretability, supporting trust and transparency in automated forensic systems. Overall, this study contributes to the field of digital forensics by providing a practical and scalable solution for deepfake image detection, addressing key challenges associated with modern synthetic media.</p>
+        <p class="paper-text"><strong>Future Scope:</strong> Extension to video-based deepfake detection, incorporating multimodal data including audio and text cues, exploring transformer-based architectures, improving robustness against adversarial attacks, and expanding training datasets to include diverse demographic and environmental conditions.</p>
+      </section>
+
+      <section id="p1-refs" class="paper-section">
+        <h2>References</h2>
+        <ol class="references-list">
+          <li>D. Afchar, V. Nozick, J. Yamagishi, and I. Echizen, "MesoNet: A compact facial video forgery detection network," <em>Proc. IEEE Workshop on Information Forensics and Security (WIFS)</em>, pp. 1–7, 2018.</li>
+          <li>A. Rössler, D. Cozzolino, L. Verdoliva, C. Riess, J. Thies, and M. Nießner, "FaceForensics++: Learning to detect manipulated facial images," <em>Proc. IEEE/CVF Int. Conf. Computer Vision (ICCV)</em>, pp. 1–11, 2019.</li>
+          <li>F. Chollet, "Xception: Deep learning with depthwise separable convolutions," <em>Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)</em>, pp. 1251–1258, 2017.</li>
+          <li>H. H. Nguyen, J. Yamagishi, and I. Echizen, "Capsule-forensics: Using capsule networks to detect forged images and videos," <em>IEEE Trans. Information Forensics and Security</em>, vol. 16, pp. 3412–3427, 2021.</li>
+          <li>Y. Li and S. Lyu, "Exposing deepfake videos by detecting face warping artifacts," <em>Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition Workshops (CVPRW)</em>, pp. 46–52, 2019.</li>
+          <li>L. Li, J. Bao, H. Yang, D. Chen, and F. Wen, "Face X-Ray for more general face forgery detection," <em>Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)</em>, pp. 5001–5010, 2020.</li>
+          <li>B. Dolhansky, J. Bitton, B. Pflaum, J. Lu, R. Howes, M. Wang, and C. C. Ferrer, "The DeepFake Detection Challenge (DFDC) dataset," <em>arXiv preprint arXiv:2006.07397</em>, 2020.</li>
+          <li>R. Tolosana, S. Vera-Rodriguez, J. Fierrez, A. Morales, and J. Ortega-Garcia, "Deepfakes and beyond: A survey of face manipulation and fake detection," <em>Information Fusion</em>, vol. 64, pp. 131–148, 2020.</li>
+          <li>J. Li, T. Sun, Y. Yang, and S. Wang, "Frequency domain learning for deepfake image detection," <em>IEEE Access</em>, vol. 9, pp. 121318–121329, 2021.</li>
+          <li>A. Rawat, R. Singh, and M. Vatsa, "Cross-dataset generalization in deepfake detection: A benchmark study," <em>IEEE Access</em>, vol. 10, pp. 98829–98842, 2022.</li>
+        </ol>
+      </section>
+
+      <!-- ═══════════════════════════════════════════
+           PAPER 2
+      ═══════════════════════════════════════════ -->
+      <div class="paper-title-block" style="margin-top:3rem">
+        <div style="font-size:12px;color:var(--accent2);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Research Paper 2 — Continuation Study</div>
+        <h1 class="paper-title">Deepfake Image Detection – Real or Fake (Continuation: Hybrid CNN-Transformer with Multimodal Fusion)</h1>
+        <div class="paper-authors">
+          Krish Lal Srivastava<sup>1</sup>, Diksha Asnora<sup>2</sup>, Harshit Mehra<sup>3</sup>, Shreya Gupta<sup>4</sup><br>
+          Guide: Mr. Abhishek Chaudhary
+        </div>
+        <div class="paper-affil"><sup>1,2,3,4</sup>Department of Computer Science and Engineering, MGM's College of Engineering and Technology, Noida, Uttar Pradesh, India</div>
+        <div class="paper-tags">
+          <span class="paper-tag">Deepfake Detection</span>
+          <span class="paper-tag">CNN-Transformer</span>
+          <span class="paper-tag">Multimodal Fusion</span>
+          <span class="paper-tag">Explainable AI</span>
+          <span class="paper-tag">Adversarial Robustness</span>
+        </div>
+      </div>
+
+      <section id="p2-abstract" class="paper-section">
+        <h2>Abstract</h2>
+        <p class="paper-text">The rapid advancement of generative artificial intelligence has intensified the challenge of distinguishing authentic media from synthetic deepfakes. Building upon prior CNN-based frameworks, this continuation research explores advanced detection strategies that address real-world deployment issues such as adversarial robustness, multimodal manipulation, and interpretability. A <strong>hybrid architecture integrating convolutional neural networks with transformer-based attention mechanisms</strong> is proposed, alongside multimodal fusion of image, audio, and metadata features.</p>
+        <p class="paper-text">Experimental evaluation across benchmark datasets demonstrates improved generalization, resilience against compression, and enhanced transparency through explainable AI techniques. The findings highlight that scalable, interpretable, and fairness-aware detection systems are essential for practical applications in journalism, law enforcement, and social media moderation.</p>
+        <div class="paper-callout">
+          <strong>Key Result:</strong> The proposed hybrid CNN-Transformer achieves 97.2% accuracy on FaceForensics++ with only 28ms inference time — outperforming MesoNet, XceptionNet, and Capsule Networks on both accuracy and speed.
+        </div>
+      </section>
+
+      <section id="p2-intro" class="paper-section">
+        <h2>1. Introduction</h2>
+        <p class="paper-text">The continuous evolution of artificial intelligence has transformed the landscape of digital media, enabling the creation of synthetic content that is increasingly difficult to distinguish from authentic sources. Deepfake technology, powered by advanced generative models such as GANs and diffusion networks, has progressed beyond simple face swaps to highly realistic manipulations that integrate audio, video, and textual elements.</p>
+        <p class="paper-text">While the first phase of research primarily focused on CNNs for image-based detection, the growing sophistication of deepfakes necessitates more advanced and adaptable approaches. This second study builds upon earlier CNN-based frameworks by addressing challenges encountered in real-world deployment, including adversarial robustness, multimodal manipulation, and interpretability.</p>
+        <p class="paper-text">The misuse of deepfakes continues to pose risks in domains such as misinformation, identity theft, political propaganda, and digital forensics. Consequently, the development of scalable, transparent, and fairness-aware detection systems has become a critical priority. By exploring hybrid architectures that combine CNNs with transformer-based attention mechanisms, and by incorporating multimodal fusion strategies, this research aims to extend the capabilities of deepfake detection beyond controlled datasets.</p>
+      </section>
+
+      <section id="p2-related" class="paper-section">
+        <h2>2. Literature Review</h2>
+        <p class="paper-text">The detection of deepfake content has become one of the most critical research areas in artificial intelligence and digital forensics. Early approaches primarily relied on handcrafted features such as texture inconsistencies, lighting variations, and compression artifacts.</p>
+        <p class="paper-text">With the rise of deep learning, CNNs emerged as a dominant technique. Afchar et al. introduced MesoNet, which analyzed mesoscopic features of facial images but struggled with large-scale datasets and high-resolution synthetic images. Rössler et al. later developed the FaceForensics++ dataset, which became a benchmark for evaluating detection models. XceptionNet achieved high accuracy by learning complex spatial features, though at the cost of significant computational resources.</p>
+        <p class="paper-text">Beyond CNNs, researchers explored alternative strategies to improve robustness. Capsule networks demonstrated the ability to capture spatial hierarchies, while frequency-domain analysis revealed subtle GAN-related artifacts invisible in the spatial domain. Transformer-based architectures introduced multi-head attention mechanisms, enabling models to capture long-range dependencies and outperform CNNs in high-resolution scenarios. Additionally, multimodal approaches that combined visual, audio, and textual cues showed promise in detecting manipulations across diverse media formats.</p>
+        <p class="paper-text">Explainability has also become a major focus in recent literature. Techniques such as Grad-CAM and SHAP provide visual explanations of model decisions, enhancing transparency and trust in forensic applications. However, challenges remain in ensuring cross-dataset generalization, resilience against adversarial attacks, and fairness across demographic groups.</p>
+      </section>
+
+      <section id="p2-problem" class="paper-section">
+        <h2>3. Problem Statement</h2>
+        <p class="paper-text">Despite significant progress in deepfake detection research, several unresolved challenges continue to hinder the effectiveness of existing solutions in real-world environments. As generative models evolve from traditional GANs to diffusion-based architectures and multimodal synthesis, detection systems must adapt to increasingly sophisticated manipulations.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Challenge</th><th>Description</th><th>Limitations in Existing Models</th><th>Proposed Solution in Continuation Framework</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Cross-Dataset Generalization</td><td>Models fail when tested on unseen datasets or new manipulation techniques</td><td>Accuracy drops significantly outside training dataset</td><td>Hybrid CNN-Transformer architecture with transfer learning for adaptability</td></tr>
+              <tr><td>Robustness to Compression</td><td>Social media platforms apply compression, obscuring forensic artifacts</td><td>CNN-based detectors lose reliability under heavy compression</td><td>Data augmentation with simulated compression and adversarial training</td></tr>
+              <tr><td>Adversarial Attacks</td><td>Malicious perturbations deceive detection systems</td><td>Vulnerable to small pixel-level changes</td><td>Incorporation of adversarial defense strategies and robust augmentation</td></tr>
+              <tr><td>Multimodal Manipulation</td><td>Deepfakes now integrate audio, video, and text cues</td><td>Image-only models cannot detect multimodal manipulations</td><td>Fusion of visual, audio, and metadata features for multimodal detection</td></tr>
+              <tr><td>Interpretability</td><td>Deep learning models act as black boxes</td><td>Predictions lack transparency and justification</td><td>Explainable AI techniques (Grad-CAM, SHAP) for visual and feature-level insights</td></tr>
+              <tr class="highlight-row"><td>Fairness and Bias</td><td>Dataset imbalance reduces reliability across demographics</td><td>Biased predictions in underrepresented groups</td><td>Fairness-aware training with diverse datasets and balanced representation</td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table I. Comparative Overview of Deepfake Detection Challenges and Proposed Solutions</p>
+        </div>
+      </section>
+
+      <section id="p2-method" class="paper-section">
+        <h2>4. Methodology</h2>
+        <p class="paper-text">The methodology adopted in this continuation research builds upon the CNN-based framework introduced in the first study, while extending it with hybrid architectures and multimodal strategies to address real-world challenges. The process is structured into sequential stages: data acquisition, preprocessing, model design, training, and evaluation.</p>
+        <p class="paper-text"><strong>A. Data Acquisition and Preprocessing.</strong> Benchmark datasets such as FaceForensics++, Celeb-DF, DFDC, and FakeAVCeleb were utilized to ensure diversity in manipulations and modalities. Facial regions were extracted using automated detection and alignment, resized to a fixed resolution of 224 × 224 pixels, and normalized for numerical stability. To simulate real-world conditions, preprocessing included compression artifacts, noise injection, and multimodal alignment of audio and metadata. Data augmentation techniques including rotation, flipping, brightness variation, and adversarial perturbations were applied to improve robustness.</p>
+        <p class="paper-text"><strong>B. Hybrid Model Architecture.</strong> The proposed detection system integrates CNNs for local feature extraction with transformer-based attention mechanisms for capturing long-range dependencies. CNN layers focus on texture and pixel-level artifacts, while transformer layers analyze global relationships across facial regions. For multimodal fusion, audio spectrograms and textual metadata are processed alongside visual features, enabling detection of cross-modal manipulations. The system comprises three modules: (1) Preprocessing and feature extraction using CNNs, (2) Transformer-based temporal modeling, and (3) Decision fusion and explainability layer.</p>
+        <p class="paper-text"><strong>C. Training Strategy.</strong> The model was trained using binary cross-entropy loss with the Adam optimizer and a low learning rate to ensure stable convergence. Transfer learning was employed by initializing CNN layers with pretrained ImageNet weights, while transformer layers were fine-tuned on deepfake datasets. Adversarial training was incorporated to strengthen resilience against perturbations. The dataset was split into training, validation, and testing subsets in a 70:15:15 ratio, with early stopping applied to prevent overfitting.</p>
+        <p class="paper-text"><strong>D. Evaluation Metrics.</strong> Performance was assessed using accuracy, precision, recall, F1-score, and area under the ROC curve (AUC). Cross-dataset testing was conducted to evaluate generalization, while adversarial robustness was measured by introducing controlled perturbations. Interpretability was analyzed using Grad-CAM and SHAP visualizations to highlight manipulated regions influencing classification decisions.</p>
+      </section>
+
+      <section id="p2-design" class="paper-section">
+        <h2>5. System Design</h2>
+        <p class="paper-text">The system design for the continuation framework extends the modular architecture introduced in the first study to support multimodal inputs, transformer-based processing, and explainability outputs. The overall system follows a sequential pipeline beginning with image acquisition and ending with classification output. The architecture is optimized for real-time inference and interpretability.</p>
+        <p class="paper-text">The methodology adopted in this continuation research builds upon the CNN-based framework introduced in the first study, while extending it with hybrid architectures and multimodal strategies to address real-world challenges. The process is structured into sequential stages: data acquisition, preprocessing, model design, training, and evaluation.</p>
+        <div class="paper-callout">
+          <strong>Architecture Summary:</strong> CNN (local features) + Transformer attention (global dependencies) + Multimodal fusion (audio, metadata) → Decision fusion → Explainability layer (Grad-CAM + SHAP) → Binary verdict with confidence score.
+        </div>
+      </section>
+
+      <section id="p2-results" class="paper-section">
+        <h2>6. Results and Discussion</h2>
+        <p class="paper-text">This section presents the evaluation of the proposed hybrid CNN-Transformer based deepfake detection framework. The results are analyzed using standard classification metrics and compared with existing models to highlight improvements in accuracy, robustness, and interpretability.</p>
+        <p class="paper-text"><strong>A. Quantitative Performance Analysis.</strong> The framework was tested on benchmark datasets including FaceForensics++, Celeb-DF, DFDC, and FakeAVCeleb. Performance metrics such as accuracy, precision, recall, and F1-score were computed.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Dataset</th><th>Accuracy (%)</th><th>Precision (%)</th><th>Recall (%)</th><th>F1-Score (%)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>FaceForensics++</td><td>97.2</td><td>96.8</td><td>96.4</td><td>96.6</td></tr>
+              <tr><td>Celeb-DF</td><td>96.5</td><td>95.9</td><td>95.2</td><td>95.5</td></tr>
+              <tr><td>DFDC</td><td>93.8</td><td>92.7</td><td>92.1</td><td>92.4</td></tr>
+              <tr class="highlight-row"><td>FakeAVCeleb (Multimodal)</td><td>94.6</td><td>93.9</td><td>93.2</td><td>93.5</td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table II. Performance of Proposed Hybrid Model Across Datasets</p>
+        </div>
+
+        <p class="paper-text">The results indicate that the hybrid model consistently outperforms traditional CNN-only architectures, particularly in cross-dataset generalization and multimodal detection.</p>
+        <p class="paper-text"><strong>B. Comparative Analysis.</strong> To evaluate efficiency, the proposed framework was compared with existing models such as MesoNet, XceptionNet, and Capsule Networks.</p>
+
+        <div class="paper-table-wrap">
+          <table class="paper-table">
+            <thead>
+              <tr><th>Model</th><th>Accuracy (%)</th><th>Inference Time (ms)</th><th>Interpretability</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>MesoNet</td><td>92.4</td><td>15</td><td>Limited</td></tr>
+              <tr><td>XceptionNet</td><td>94.6</td><td>45</td><td>Moderate</td></tr>
+              <tr><td>Capsule Networks</td><td>93.1</td><td>60</td><td>Limited</td></tr>
+              <tr class="highlight-row"><td><strong>Proposed Hybrid CNN-Transformer</strong></td><td><strong>97.2</strong></td><td><strong>28</strong></td><td><strong>High (Grad-CAM, SHAP)</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="table-caption">Table III. Comparative Performance of Detection Models</p>
+        </div>
+
+        <p class="paper-text"><strong>C. Qualitative Evaluation.</strong> Grad-CAM and SHAP visualizations were used to highlight manipulated facial regions such as eyes, mouth, and boundary areas. These visual explanations improve transparency and support forensic investigations by showing the basis of classification decisions.</p>
+        <p class="paper-text"><strong>D. Discussion.</strong> The results confirm that the proposed framework effectively addresses key challenges in deepfake detection. The hybrid architecture improves generalization across datasets, adversarial training enhances robustness, and multimodal fusion enables detection of complex manipulations. Furthermore, interpretability techniques strengthen user trust, making the system suitable for deployment in journalism, law enforcement, and social media moderation.</p>
+      </section>
+
+      <section id="p2-conclusion" class="paper-section">
+        <h2>8. Conclusion</h2>
+        <p class="paper-text">This continuation study reinforces the urgent need for advanced deepfake detection systems capable of addressing real-world challenges. Building upon the CNN-based framework introduced earlier, the proposed hybrid CNN-Transformer framework demonstrates superior accuracy, robustness, and interpretability. By integrating multimodal fusion and adversarial defense strategies, the system effectively detects manipulations across diverse datasets and compressed social media content.</p>
+        <p class="paper-text">The inclusion of explainable AI techniques further enhances transparency, allowing forensic analysts and media platforms to understand the basis of classification decisions. Compared to traditional models, the proposed framework achieves a balanced trade-off between detection performance and computational efficiency, making it suitable for deployment in journalism, law enforcement, and social media moderation.</p>
+        <p class="paper-text">In conclusion, this research contributes to the advancement of digital forensics by providing a scalable, trustworthy, and fairness-aware solution for deepfake detection, thereby supporting the broader goal of safeguarding authenticity and credibility in digital media.</p>
+        <p class="paper-text"><strong>Future Scope:</strong></p>
+        <p class="paper-text">1. <strong>Video-Based Detection</strong> — Extending the system to analyze temporal inconsistencies such as unnatural blinking, facial motion irregularities, and lip-sync mismatches.</p>
+        <p class="paper-text">2. <strong>Multimodal Expansion</strong> — Incorporating audio, text, and contextual metadata alongside visual features.</p>
+        <p class="paper-text">3. <strong>Transformer and Diffusion Models</strong> — Leveraging advanced transformer architectures and adapting detection strategies for diffusion-generated deepfakes.</p>
+        <p class="paper-text">4. <strong>Adversarial Defense</strong> — Developing stronger adversarial training methods and robust augmentation strategies.</p>
+        <p class="paper-text">5. <strong>Fairness and Bias Mitigation</strong> — Expanding datasets to include diverse demographics and environmental conditions.</p>
+        <p class="paper-text">6. <strong>Edge and Real-Time Deployment</strong> — Optimizing lightweight versions of the model for mobile devices and social media platforms.</p>
+        <p class="paper-text">7. <strong>Blockchain Integration</strong> — Combining detection systems with blockchain-based verification for secure and tamper-proof authenticity checks.</p>
+        <p class="paper-text">8. <strong>Explainable AI Enhancements</strong> — Advancing interpretability techniques beyond Grad-CAM and SHAP to further increase transparency and user trust in forensic applications.</p>
+      </section>
+
+      <section id="p2-refs" class="paper-section">
+        <h2>References</h2>
+        <ol class="references-list">
+          <li>Afchar, D., Nozick, V., Yamagishi, J., &amp; Echizen, I. MesoNet: A Compact Facial Video Forgery Detection Network. <em>IEEE International Workshop on Information Forensics and Security (WIFS)</em>, 2018.</li>
+          <li>Rössler, A., Cozzolino, D., Verdoliva, L., Riess, C., Thies, J., &amp; Nießner, M. FaceForensics++: Learning to Detect Manipulated Facial Images. <em>IEEE/CVF International Conference on Computer Vision (ICCV)</em>, 2019.</li>
+          <li>Wang, S., Li, Y., &amp; Lyu, S. Transformer-Based Deepfake Detection: Exploiting Long-Range Dependencies in Visual Artifacts. <em>Proc. Computer Vision and Pattern Recognition (CVPR)</em>, 2022.</li>
+          <li>Li, H., Chang, M., &amp; Ma, X. Frequency-Domain Analysis for Robust Deepfake Detection. <em>IEEE Transactions on Image Processing</em>, vol. 32, pp. 1124–1136, 2023.</li>
+          <li>Agarwal, S., Farid, H., Gu, Y., He, M., Nagano, K., &amp; Li, H. Detecting Deep-Fake Videos from Phoneme-Viseme Mismatches. <em>IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)</em>, 2021.</li>
+          <li>Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., &amp; Batra, D. Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization. <em>International Journal of Computer Vision</em>, vol. 128, no. 2, pp. 336–359, 2020.</li>
+          <li>Lundberg, S. M., &amp; Lee, S. I. A Unified Approach to Interpreting Model Predictions. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 2017.</li>
+          <li>Dolhansky, B., Howes, R., Pflaum, B., Baram, N., &amp; Ferrer, C. C. The DeepFake Detection Challenge Dataset. <em>arXiv preprint arXiv:2006.07397</em>, 2020.</li>
+          <li>Khalid, H., Woo, S., &amp; Lee, S. FakeAVCeleb: A Novel Audio-Video Multimodal Deepfake Dataset. <em>Proceedings of the 30th ACM International Conference on Multimedia</em>, 2022.</li>
+        </ol>
+      </section>
+
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <p>© 2026 Deepfake Detection Project. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  /* ── Theme ── */
+  function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    icon.className = html.getAttribute('data-theme') === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+
+  /* ── Modal ── */
+  function openModal()  { document.getElementById('authModal').classList.add('active'); }
+  function closeModal() { document.getElementById('authModal').classList.remove('active'); }
+  function closeTrialPopup() { document.getElementById('trialPopup').classList.remove('active'); }
+
+  function switchTab(tab) {
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+    document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+    document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
+  }
+
+  /* ── Auth ── */
+  async function handleLogin() {
+    const email    = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { alert('Please enter email and password'); return; }
+    try {
+      const res  = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('dd_token', data.token);
+        localStorage.setItem('dd_user', JSON.stringify(data.user));
+        closeModal();
+        updateNavbar(data.user);
+      } else { alert(data.error || 'Login failed'); }
+    } catch { alert('Cannot connect to server.'); }
+  }
+
+  async function handleSignup() {
+    const name     = document.getElementById('signupName').value;
+    const email    = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    if (!name || !email || !password) { alert('All fields required'); return; }
+    try {
+      const res  = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('dd_token', data.token);
+        localStorage.setItem('dd_user', JSON.stringify(data.user));
+        closeModal();
+        updateNavbar(data.user);
+      } else { alert(data.error || 'Signup failed'); }
+    } catch { alert('Cannot connect to server.'); }
+  }
+
+  /* ── Navbar helpers ── */
+  function getInitials(name) {
+    return name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  function updateNavbar(user) {
+    const navRight = document.querySelector('.nav-right');
+    if (!navRight || !user) return;
+    navRight.innerHTML = `
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-sun" id="themeIcon"></i>
+      </button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;">
+          ${getInitials(user.name)}
+        </div>
+        <div style="display:flex;flex-direction:column;line-height:1.2;">
+          <span style="font-size:14px;font-weight:600;color:var(--text)">${user.name}</span>
+          <span style="font-size:11px;color:var(--accent);font-weight:600;">
+            ${user.plan === 'paid' ? '⭐ Pro Plan' : '🕐 Free Trial'}
+          </span>
+        </div>
+      </div>
+      <button class="nav-btn outline" onclick="logoutUser()">Sign Out</button>`;
+  }
+
+  function logoutUser() {
+    localStorage.removeItem('dd_token');
+    localStorage.removeItem('dd_user');
+    location.reload();
+  }
+
+  /* ── Restore session on page load (THE KEY FIX) ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('dd_user') || 'null');
+    if (user) updateNavbar(user);
+  });
+
+  document.getElementById('authModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // trial popup removed
+  function closeTrialPopup() {}
+
+  /* ── Smooth scroll TOC ── */
+  document.querySelectorAll('.toc-sidebar a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
